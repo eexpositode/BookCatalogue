@@ -1,14 +1,8 @@
 package com.eexposito.bookcatalogue.headers;
 
-public class CatalogueHeader {
+public interface CatalogueHeader {
 
-    public static String getSourceData() {
+    String getSourceData();
 
-        return null;
-    }
-
-    public static String[] getValues() {
-
-        return null;
-    }
+    String[] getValues();
 }

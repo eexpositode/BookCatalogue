@@ -1,32 +1,19 @@
 package com.eexposito.bookcatalogue.headers;
 
-public class AuthorsHeader extends CatalogueHeader {
+public class AuthorsHeader implements CatalogueHeader {
 
-    public static String getEmail() {
+    public static final String FIRSTNAME = "Vorname";
+    public static final String EMAIL = "Emailadresse";
+    public static final String LASTNAME = "Nachname";
+    private static final String DATA_FILE = "/data/autoren.csv";
 
-        return "Emailadresse";
+    public String getSourceData() {
+
+        return DATA_FILE;
     }
 
-    public static String getFirstName() {
+    public String[] getValues() {
 
-        return "Vorname";
-    }
-
-    public static String getLastName() {
-
-        return "Nachname";
-    }
-
-    public static String getSourceData() {
-
-        return "/data/autoren.csv";
-    }
-
-    public static String[] getValues() {
-
-        return new String[]{
-                getEmail(),
-                getFirstName(),
-                getLastName()};
+        return new String[]{EMAIL, FIRSTNAME, LASTNAME};
     }
 }

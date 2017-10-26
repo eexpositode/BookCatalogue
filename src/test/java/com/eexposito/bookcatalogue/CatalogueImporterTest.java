@@ -1,5 +1,6 @@
 package com.eexposito.bookcatalogue;
 
+import com.eexposito.bookcatalogue.headers.AuthorsHeader;
 import com.eexposito.bookcatalogue.models.Author;
 import org.apache.commons.csv.CSVParser;
 import org.junit.After;
@@ -31,26 +32,27 @@ public class CatalogueImporterTest {
     @Test(expected = FileNotFoundException.class)
     public void testImportCatalogueNoDataSource() throws Exception {
 
-        mCatalogueImporter.importCatalogueFromStream("");
+        mCatalogueImporter.importCatalogueFromStream("", null);
     }
 
     @Test(expected = NullPointerException.class)
     public void testImportCatalogueDataSourceNotFound() throws Exception {
 
-        mCatalogueImporter.importCatalogueFromStream("/NO_EXISTING.csv");
+        mCatalogueImporter.importCatalogueFromStream("/NO_EXISTING.csv", null);
     }
 
     @Test
     public void testImportCatalogueSourceFileFound() throws Exception {
 
-        CSVParser parser = mCatalogueImporter.importCatalogueFromStream(CatalogueImporter.AUTHOR_DATA);
+        AuthorsHeader authorsHeader = new AuthorsHeader();
+        CSVParser parser = mCatalogueImporter.importCatalogueFromStream(authorsHeader.getSourceData(), authorsHeader.getValues());
         assertThat("Parser is null", parser, notNullValue());
     }
 
     @Test
-    public void importAuthorsFromDataSource() throws Exception {
+    public void testImportAuthorsFromDataSource() throws Exception {
 
-        Set<Author> authors = mCatalogueImporter.importAuthorsFromDataSource();
+        Set<Author> authors = mCatalogueImporter.importModelsFromDataSource(Author.class, AuthorsHeader.class);
         assertThat("Authors is null", authors, notNullValue());
     }
 }

@@ -1,17 +1,14 @@
 package com.eexposito.bookcatalogue.models;
 
-public class Author extends CatalogueModel {
+import com.eexposito.bookcatalogue.headers.AuthorsHeader;
+import org.apache.commons.csv.CSVRecord;
+
+public class Author implements CatalogueModel {
 
     private String mFirstName;
     private String mLastName;
     private String mEmail;
 
-    public Author(String email, String firstName, String lastName) {
-
-        setEmail(email);
-        setFirstName(firstName);
-        setLastName(lastName);
-    }
     //////////////////////////////////////////////////////////////////////
     // Getters & Setters
     //////////////////////////////////////////////////////////////////////
@@ -43,5 +40,13 @@ public class Author extends CatalogueModel {
     private void setEmail(String mEmail) {
 
         this.mEmail = mEmail;
+    }
+
+    @Override
+    public void bind(CSVRecord record) {
+
+        setEmail(record.get(AuthorsHeader.EMAIL));
+        setFirstName(record.get(AuthorsHeader.FIRSTNAME));
+        setLastName(record.get(AuthorsHeader.LASTNAME));
     }
 }

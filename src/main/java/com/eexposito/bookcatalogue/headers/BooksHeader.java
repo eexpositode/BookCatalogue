@@ -1,33 +1,22 @@
 package com.eexposito.bookcatalogue.headers;
 
-public class BooksHeader extends CatalogueHeader {
+public class BooksHeader implements CatalogueHeader {
 
-    public static String getTitel() {
+    public static final String TITLE = "Titel";
+    public static final String ISBN = "ISBN-Nummer";
+    public static final String AUTHORS = "Autoren";
+    public static final String DESCRIPTION = "Kurzbeschreibung";
+    public static final String DATA_FILE = "/data/buecher.csv";
 
-        return "Titel";
+    @Override
+    public String getSourceData() {
+
+        return DATA_FILE;
     }
 
-    public static String getISBN() {
+    @Override
+    public String[] getValues() {
 
-        return "ISBN-Nummer";
-    }
-
-    public static String getAuthors() {
-
-        return "Autoren";
-    }
-
-    public static String getDescription() {
-
-        return "Kurzbeschreibung";
-    }
-
-    public static String[] getValues() {
-
-        return new String[]{
-                getTitel(),
-                getISBN(),
-                getAuthors(),
-                getDescription()};
+        return new String[]{TITLE, ISBN, AUTHORS, DESCRIPTION};
     }
 }

@@ -1,16 +1,11 @@
 package com.eexposito.bookcatalogue.models;
 
+import com.eexposito.bookcatalogue.headers.BooksHeader;
+import org.apache.commons.csv.CSVRecord;
+
 public class Book extends Publication {
 
     private String mDescription;
-
-    public Book(String title, String isbn, String[] authors, String description) {
-
-        setTitle(title);
-        setISBN(isbn);
-        setAuthors(authors);
-        setDescription(description);
-    }
 
     //////////////////////////////////////////////////////////////////////
     // Getters & Setters
@@ -23,5 +18,14 @@ public class Book extends Publication {
     private void setDescription(String mDescription) {
 
         this.mDescription = mDescription;
+    }
+
+    @Override
+    public void bind(CSVRecord record) {
+
+        setTitle(record.get(BooksHeader.TITLE));
+        setISBN(record.get(BooksHeader.ISBN));
+//        setAuthors(record.get(BooksHeader.AUTHORS));
+        setDescription(record.get(BooksHeader.DESCRIPTION));
     }
 }

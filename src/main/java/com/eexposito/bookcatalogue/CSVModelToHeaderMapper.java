@@ -11,14 +11,14 @@ import com.eexposito.bookcatalogue.models.Magazine;
 
 import java.util.HashMap;
 
-public class CSVMapper {
+public class CSVModelToHeaderMapper {
 
-    public static final HashMap<Class<? extends CatalogueModel>, Class<? extends CatalogueHeader>> modelToHeaderMap =
+    public static final HashMap<Class<? extends CatalogueModel>, Class<? extends CatalogueHeader>> map =
             new HashMap<>();
 
     static {
-        modelToHeaderMap.put(Author.class, AuthorsHeader.class);
-        modelToHeaderMap.put(Book.class, BooksHeader.class);
-        modelToHeaderMap.put(Magazine.class, MagazineHeader.class);
+        map.put(Author.class, AuthorsHeader.class);
+        map.put(Book.class, BooksHeader.class);
+        map.put(Magazine.class, MagazineHeader.class);
     }
 }

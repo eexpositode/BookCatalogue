@@ -1,17 +1,24 @@
 package com.eexposito.bookcatalogue.models;
 
+import com.eexposito.bookcatalogue.headers.MagazineHeader;
+import org.apache.commons.csv.CSVRecord;
+
 public class Magazine extends Publication {
 
     private String mPublicationDate;
 
-    public Magazine(String title, String isbn, String[] authors, String date) {
+    @Override
+    public void bind(CSVRecord record) {
 
-        setTitle(title);
-        setISBN(isbn);
-        setAuthors(authors);
-        setPublicationDate(date);
+        setTitle(record.get(MagazineHeader.TITLE));
+        setISBN(record.get(MagazineHeader.ISBN));
+//        setAuthors(record.get(MagazineHeader.AUTHOR));
+        setPublicationDate(record.get(MagazineHeader.DATE));
     }
 
+    //////////////////////////////////////////////////////////////////////
+    // Getters & Setters
+    //////////////////////////////////////////////////////////////////////
     public String getPublicationDate() {
 
         return mPublicationDate;

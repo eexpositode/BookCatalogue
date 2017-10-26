@@ -1,33 +1,21 @@
 package com.eexposito.bookcatalogue.headers;
 
-public class MagazineHeader extends CatalogueHeader{
+public class MagazineHeader implements CatalogueHeader {
 
-    public static String getTitle() {
+    public static final String TITLE = "Title";
+    public static final String ISBN = "ISBN-Nummer";
+    public static final String AUTHOR = "Autor";
+    public static final String DATE = "Erscheinungsdatum";
+    public static final String DATA_FILE = "/data/zeitschriften.csv";
 
-        return "Title";
+    @Override
+    public String getSourceData() {
+
+        return DATA_FILE;
     }
 
-    public static String getISBN() {
+    public String[] getValues() {
 
-        return "ISBN-Nummer";
-    }
-
-    public static String getAuthor() {
-
-        return "Autor";
-    }
-
-    public static String getPublicationDate() {
-
-        return "Erscheinungsdatum";
-    }
-
-    public static String[] getValues() {
-
-        return new String[]{
-                getTitle(),
-                getISBN(),
-                getAuthor(),
-                getPublicationDate()};
+        return new String[]{TITLE, ISBN, AUTHOR, DATE};
     }
 }

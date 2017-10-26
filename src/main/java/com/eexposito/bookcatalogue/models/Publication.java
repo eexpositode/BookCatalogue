@@ -1,6 +1,6 @@
 package com.eexposito.bookcatalogue.models;
 
-public abstract class Publication extends CatalogueModel {
+public abstract class Publication implements CatalogueModel {
 
     private String mTitle;
     private String[] mAuthors;
