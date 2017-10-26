@@ -10,6 +10,7 @@ import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 
 import java.io.FileReader;
+import java.net.URL;
 import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -55,7 +56,11 @@ public class CatalogueImporter {
 
     CSVParser importCatalogueFromStream(final String filename, String[] headers) throws Exception {
 
-        String filePath = getClass().getResource(filename).getFile();
+        URL fileURL = getClass().getResource(filename);
+        if (fileURL == null) {
+            throw new RuntimeException(String.format("File %s not found", filename));
+        }
+        String filePath = fileURL.getFile();
         FileReader in = new FileReader(filePath);
         return CSV_FORMAT_SEMICOLON.withHeader(headers).parse(in);
     }
