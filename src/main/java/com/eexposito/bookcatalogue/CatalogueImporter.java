@@ -2,7 +2,9 @@ package com.eexposito.bookcatalogue;
 
 import com.eexposito.bookcatalogue.headers.CatalogueHeader;
 import com.eexposito.bookcatalogue.models.Author;
+import com.eexposito.bookcatalogue.models.Book;
 import com.eexposito.bookcatalogue.models.CatalogueModel;
+import com.eexposito.bookcatalogue.models.Magazine;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
@@ -17,10 +19,14 @@ public class CatalogueImporter {
     private static final CSVFormat CSV_FORMAT_SEMICOLON = CSVFormat.newFormat(';');
 
     private Set<Author> mAuthors;
+    private Set<Book> mBooks;
+    private Set<Magazine> mMagazines;
 
     public void importCatalogue() {
 
-        mAuthors = importModelsFromDataSource(Author.class, CSVModelToHeaderMapper.map.get(Author.class));
+        mAuthors = importModelsFromDataSource(Author.class, CSVMapper.map.get(Author.class));
+        mBooks = importModelsFromDataSource(Book.class, CSVMapper.map.get(Book.class));
+        mMagazines = importModelsFromDataSource(Magazine.class, CSVMapper.map.get(Magazine.class));
     }
 
     <M extends CatalogueModel, H extends CatalogueHeader> Set<M> importModelsFromDataSource(Class<M> modelClass, Class<H> headerClass) {
@@ -46,22 +52,6 @@ public class CatalogueImporter {
             return null;
         }
     }
-//
-//    Set<Author> importModelsFromDataSource() {
-//
-//        try {
-//            CSVParser parser = importCatalogueFromStream(AUTHOR_DATA, header.getValues());
-//            Collection<CSVRecord> records = parser.getRecords();
-//            return records.stream()
-//                    .map(record -> new Author(record.get(AuthorsHeader.getEmail()),
-//                                          record.get(AuthorsHeader.getFirstName()),
-//                                          record.get(AuthorsHeader.getLastName())))
-//                    .collect(Collectors.toSet());
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return null;
-//        }
-//    }
 
     CSVParser importCatalogueFromStream(final String filename, String[] headers) throws Exception {
 

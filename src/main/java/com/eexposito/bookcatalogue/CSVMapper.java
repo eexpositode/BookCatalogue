@@ -11,9 +11,9 @@ import com.eexposito.bookcatalogue.models.Magazine;
 
 import java.util.HashMap;
 
-public class CSVModelToHeaderMapper {
+class CSVMapper {
 
-    public static final HashMap<Class<? extends CatalogueModel>, Class<? extends CatalogueHeader>> map =
+    static final HashMap<Class<? extends CatalogueModel>, Class<? extends CatalogueHeader>> map =
             new HashMap<>();
 
     static {
