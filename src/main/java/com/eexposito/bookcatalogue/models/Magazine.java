@@ -19,9 +19,9 @@ public class Magazine extends Publication {
     //////////////////////////////////////////////////////////////////////
     // Implementations
     //////////////////////////////////////////////////////////////////////
-    @Override
-    public String[] getFileHeaderMapping() {
-
-        return FILE_HEADER_MAPPING;
-    }
+//    @Override
+//    public String[] getFileHeaderMapping() {
+//
+//        return FILE_HEADER_MAPPING;
+//    }
 }

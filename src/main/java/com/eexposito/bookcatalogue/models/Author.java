@@ -1,12 +1,21 @@
 package com.eexposito.bookcatalogue.models;
 
-public class Author implements CSVMappable {
+import org.apache.commons.csv.CSVRecord;
 
-    private static final String[] FILE_HEADER_MAPPING = {"Emailadresse", "Vorname", "Nachname"};
+public class Author {
+
+    public static final String[] FILE_HEADER_MAPPING = {"Emailadresse", "Vorname", "Nachname"};
 
     private String mFirstName;
     private String mLastName;
     private String mEmail;
+
+    public Author(CSVRecord record) {
+
+        setEmail(record.get(FILE_HEADER_MAPPING[0]));
+        setFirstName(record.get(FILE_HEADER_MAPPING[1]));
+        setLastName(record.get(FILE_HEADER_MAPPING[2]));
+    }
 
     //////////////////////////////////////////////////////////////////////
     // Getters & Setters
@@ -44,9 +53,9 @@ public class Author implements CSVMappable {
     //////////////////////////////////////////////////////////////////////
     // Implementations
     //////////////////////////////////////////////////////////////////////
-    @Override
-    public String[] getFileHeaderMapping() {
-
-        return FILE_HEADER_MAPPING;
-    }
+//    @Override
+//    public String[] getFileHeaderMapping() {
+//
+//        return FILE_HEADER_MAPPING;
+//    }
 }

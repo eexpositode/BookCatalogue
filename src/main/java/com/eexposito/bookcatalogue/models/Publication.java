@@ -1,6 +1,6 @@
 package com.eexposito.bookcatalogue.models;
 
-public abstract class Publication implements CSVMappable {
+public abstract class Publication {
 
     private String mTitle;
     private Author[] mAuthorList;
@@ -14,7 +14,7 @@ public abstract class Publication implements CSVMappable {
         return mTitle;
     }
 
-    private void setTitle(String mTitle) {
+    void setTitle(String mTitle) {
 
         this.mTitle = mTitle;
     }
@@ -24,7 +24,7 @@ public abstract class Publication implements CSVMappable {
         return mAuthorList;
     }
 
-    private void setAuthorList(Author[] mAuthorList) {
+    void setAuthorList(Author[] mAuthorList) {
 
         this.mAuthorList = mAuthorList;
     }
@@ -34,7 +34,7 @@ public abstract class Publication implements CSVMappable {
         return mISBN;
     }
 
-    private void setISBN(String mISBN) {
+    void setISBN(String mISBN) {
 
         this.mISBN = mISBN;
     }

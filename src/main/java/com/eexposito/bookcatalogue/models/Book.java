@@ -11,7 +11,7 @@ public class Book extends Publication {
 
         setTitle(record.get(FILE_HEADER_MAPPING[0]));
         setISBN(record.get(FILE_HEADER_MAPPING[1]));
-        setAuthorList(record.get(FILE_HEADER_MAPPING[2]));
+//        setAuthorList(record.get(FILE_HEADER_MAPPING[2]));
         setDescription(record.get(FILE_HEADER_MAPPING[3]));
     }
 
@@ -31,9 +31,9 @@ public class Book extends Publication {
     //////////////////////////////////////////////////////////////////////
     // Implementations
     //////////////////////////////////////////////////////////////////////
-    @Override
-    public String[] getFileHeaderMapping() {
-
-        return FILE_HEADER_MAPPING;
-    }
+//    @Override
+//    public String[] getFileHeaderMapping() {
+//
+//        return FILE_HEADER_MAPPING;
+//    }
 }
