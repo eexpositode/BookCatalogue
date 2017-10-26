@@ -1,12 +1,13 @@
 package com.eexposito.bookcatalogue;
 
-import org.apache.commons.csv.CSVRecord;
+import com.eexposito.bookcatalogue.models.Author;
+import org.apache.commons.csv.CSVParser;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.FileNotFoundException;
-import java.util.Collection;
+import java.util.Set;
 
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -42,7 +43,14 @@ public class CatalogueImporterTest {
     @Test
     public void testImportCatalogueSourceFileFound() throws Exception {
 
-        Collection<CSVRecord> records = mCatalogueImporter.importCatalogueFromStream(CatalogueImporter.AUTHOR_DATA);
-        assertThat("Records cannot be null", records, notNullValue());
+        CSVParser parser = mCatalogueImporter.importCatalogueFromStream(CatalogueImporter.AUTHOR_DATA);
+        assertThat("Parser is null", parser, notNullValue());
+    }
+
+    @Test
+    public void importAuthorsFromDataSource() throws Exception {
+
+        Set<Author> authors = mCatalogueImporter.importAuthorsFromDataSource();
+        assertThat("Authors is null", authors, notNullValue());
     }
 }

@@ -1,9 +1,9 @@
 package com.eexposito.bookcatalogue.models;
 
-public abstract class Publication {
+public abstract class Publication extends CatalogueModel {
 
     private String mTitle;
-    private Author[] mAuthorList;
+    private String[] mAuthors;
     private String mISBN;
 
     //////////////////////////////////////////////////////////////////////
@@ -19,14 +19,14 @@ public abstract class Publication {
         this.mTitle = mTitle;
     }
 
-    public Author[] getAuthorList() {
+    public String[] getAuthors() {
 
-        return mAuthorList;
+        return mAuthors;
     }
 
-    void setAuthorList(Author[] mAuthorList) {
+    void setAuthors(String[] mAuthorList) {
 
-        this.mAuthorList = mAuthorList;
+        this.mAuthors = mAuthorList;
     }
 
     public String getISBN() {

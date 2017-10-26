@@ -1,5 +1,7 @@
 package com.eexposito.bookcatalogue;
 
+import com.eexposito.bookcatalogue.headers.AuthorsHeader;
+import com.eexposito.bookcatalogue.headers.CatalogueHeader;
 import com.eexposito.bookcatalogue.models.Author;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
@@ -12,6 +14,7 @@ import java.util.stream.Collectors;
 
 public class CatalogueImporter {
 
+    public static final CSVFormat CSV_FORMAT_SEMICOLON = CSVFormat.newFormat(';');
     public static final String AUTHOR_DATA = "/data/autoren.csv";
     public static final String BOOK_DATA = "/data/buecher.csv";
     public static final String MAGAZINE_DATA = "/data/zeitschriften.csv";
@@ -20,27 +23,45 @@ public class CatalogueImporter {
 
     public void importCatalogue() {
 
-        importAuthorsFromDataSource();
+        mAuthors = importAuthorsFromDataSource(Author.class, CSVMapper.modelToHeaderMap.get(Author.class));
     }
 
-    void importAuthorsFromDataSource() {
+    Set<Author> importAuthorsFromDataSource(Class<Author> modelClass, Class<? extends CatalogueHeader> headerClass) {
 
-        Collection<CSVRecord> authorRecords = null;
         try {
-            authorRecords = importCatalogueFromStream(AUTHOR_DATA);
-            mAuthors = authorRecords.stream()
-                    .map(Author::new)
+            CSVParser parser = importCatalogueFromStream(AUTHOR_DATA);
+            Collection<CSVRecord> records = parser.getRecords();
+            return records.stream()
+                    .map(record -> new Author(record.get(AuthorsHeader.getEmail()),
+                                          record.get(AuthorsHeader.getFirstName()),
+                                          record.get(AuthorsHeader.getLastName())))
                     .collect(Collectors.toSet());
         } catch (Exception e) {
             e.printStackTrace();
+            return null;
         }
     }
 
-    Collection<CSVRecord> importCatalogueFromStream(final String filename) throws Exception {
+    Set<Author> importAuthorsFromDataSource() {
 
-        CSVFormat csvFileFormat = CSVFormat.DEFAULT.withHeader(Author.FILE_HEADER_MAPPING);
+        try {
+            CSVParser parser = importCatalogueFromStream(AUTHOR_DATA);
+            Collection<CSVRecord> records = parser.getRecords();
+            return records.stream()
+                    .map(record -> new Author(record.get(AuthorsHeader.getEmail()),
+                                          record.get(AuthorsHeader.getFirstName()),
+                                          record.get(AuthorsHeader.getLastName())))
+                    .collect(Collectors.toSet());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    CSVParser importCatalogueFromStream(final String filename) throws Exception {
+
         String filePath = getClass().getResource(filename).getFile();
         FileReader in = new FileReader(filePath);
-        return new CSVParser(in, csvFileFormat).getRecords();
+        return CSV_FORMAT_SEMICOLON.withHeader(AuthorsHeader.getValues()).parse(in);
     }
 }

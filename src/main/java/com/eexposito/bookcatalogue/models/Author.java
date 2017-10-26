@@ -1,22 +1,17 @@
 package com.eexposito.bookcatalogue.models;
 
-import org.apache.commons.csv.CSVRecord;
-
-public class Author {
-
-    public static final String[] FILE_HEADER_MAPPING = {"Emailadresse", "Vorname", "Nachname"};
+public class Author extends CatalogueModel {
 
     private String mFirstName;
     private String mLastName;
     private String mEmail;
 
-    public Author(CSVRecord record) {
+    public Author(String email, String firstName, String lastName) {
 
-        setEmail(record.get(FILE_HEADER_MAPPING[0]));
-        setFirstName(record.get(FILE_HEADER_MAPPING[1]));
-        setLastName(record.get(FILE_HEADER_MAPPING[2]));
+        setEmail(email);
+        setFirstName(firstName);
+        setLastName(lastName);
     }
-
     //////////////////////////////////////////////////////////////////////
     // Getters & Setters
     //////////////////////////////////////////////////////////////////////
@@ -25,7 +20,7 @@ public class Author {
         return mFirstName;
     }
 
-    public void setFirstName(String mName) {
+    private void setFirstName(String mName) {
 
         this.mFirstName = mName;
     }
@@ -35,7 +30,7 @@ public class Author {
         return mLastName;
     }
 
-    public void setLastName(String mFamilyName) {
+    private void setLastName(String mFamilyName) {
 
         this.mLastName = mFamilyName;
     }
@@ -45,17 +40,8 @@ public class Author {
         return mEmail;
     }
 
-    public void setEmail(String mEmail) {
+    private void setEmail(String mEmail) {
 
         this.mEmail = mEmail;
     }
-
-    //////////////////////////////////////////////////////////////////////
-    // Implementations
-    //////////////////////////////////////////////////////////////////////
-//    @Override
-//    public String[] getFileHeaderMapping() {
-//
-//        return FILE_HEADER_MAPPING;
-//    }
 }
