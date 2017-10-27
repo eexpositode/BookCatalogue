@@ -11,14 +11,28 @@ import com.eexposito.bookcatalogue.models.Magazine;
 
 import java.util.HashMap;
 
-class CSVMapper {
+/**
+ * Factory class that binds a {@link CatalogueModel} with its {@link CatalogueHeader}
+ */
+class CatalogueMapper {
 
-    static final HashMap<Class<? extends CatalogueModel>, Class<? extends CatalogueHeader>> map =
+    private static final HashMap<Class<? extends CatalogueModel>, Class<? extends CatalogueHeader>> map =
             new HashMap<>();
 
     static {
         map.put(Author.class, AuthorsHeader.class);
         map.put(Book.class, BooksHeader.class);
         map.put(Magazine.class, MagazineHeader.class);
+    }
+
+    /**
+     * Search for the header of the given model class
+     *
+     * @param modelClass
+     * @return a header Class
+     */
+    static Class<? extends CatalogueHeader> getHeaderForModelClass(final Class<? extends CatalogueModel> modelClass) {
+
+        return map.get(modelClass);
     }
 }
