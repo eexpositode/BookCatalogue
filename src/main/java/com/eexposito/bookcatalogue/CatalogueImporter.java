@@ -21,6 +21,7 @@ import static com.eexposito.bookcatalogue.CatalogueException.*;
 public class CatalogueImporter {
 
     private static final CSVFormat CSV_FORMAT_SEMICOLON = CSVFormat.newFormat(';');
+    public static final String MODEL_CLASS_NOT_INSTANTIATED = "Model class %s not instantiated";
 
     private Set<Author> mAuthors;
     private Set<Book> mBooks;
@@ -87,8 +88,7 @@ public class CatalogueImporter {
                             model.bind(record);
                             return model;
                         } catch (Exception e) {
-                            e.printStackTrace();
-                            return null;
+                            throw new RuntimeException(String.format(MODEL_CLASS_NOT_INSTANTIATED, modelClass));
                         }
                     })
                     .collect(Collectors.toSet());
