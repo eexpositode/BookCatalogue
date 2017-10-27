@@ -27,6 +27,7 @@ public class CatalogueImporterTest {
         mTestModel = new TestModel();
     }
 
+
     @After
     public void tearDown() throws Exception {
 
