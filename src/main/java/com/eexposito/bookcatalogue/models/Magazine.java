@@ -18,9 +18,9 @@ public class Magazine extends Publication {
         return mPublicationDate;
     }
 
-    private void setPublicationDate(String mPublicationDate) {
+    private void setPublicationDate(String publicationDate) {
 
-        this.mPublicationDate = mPublicationDate;
+        this.mPublicationDate = publicationDate;
     }
 
     //////////////////////////////////////////////////////////////////////

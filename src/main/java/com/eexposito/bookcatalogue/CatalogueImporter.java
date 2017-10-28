@@ -2,6 +2,7 @@ package com.eexposito.bookcatalogue;
 
 import com.eexposito.bookcatalogue.headers.CatalogueHeader;
 import com.eexposito.bookcatalogue.models.*;
+import com.eexposito.bookcatalogue.utils.CatalogueMapper;
 import com.eexposito.bookcatalogue.visitors.PrintModelVisitor;
 import com.eexposito.bookcatalogue.visitors.Visitor;
 import org.apache.commons.csv.CSVFormat;
@@ -14,10 +15,15 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.eexposito.bookcatalogue.CatalogueException.*;
+import static com.eexposito.bookcatalogue.utils.CatalogueException.*;
 
-public class CatalogueImporter {
+class CatalogueImporter {
 
+    private static final String PRINT_ALL_PUBLICATIONS = "Print all publications";
+    private static final String FIND_PUBLICATION_WITH_ISBN = "Find publication with ISBN %s";
+    private static final String PUBLICATION_NOT_FOUND = "No publication with %s found";
+    private static final String FIND_PUBLICATIONS_FROM_AUTHOR = "Find all publications from %s,%s";
+    private static final String SORT_PUBLICATIONS_BY_TITLE = "Print all publications sorted by title";
     private Collection<Author> mAuthors;
     private Collection<Book> mBooks;
     private Collection<Magazine> mMagazines;
@@ -43,7 +49,7 @@ public class CatalogueImporter {
     void showAllPublications() {
 
         System.out.println("================================================================================================");
-        System.out.println("Print all publications");
+        System.out.println(PRINT_ALL_PUBLICATIONS);
         PrintModelVisitor printVisitor = new PrintModelVisitor();
         visitPublications(mBooks, printVisitor);
         visitPublications(mMagazines, printVisitor);
@@ -52,20 +58,23 @@ public class CatalogueImporter {
         System.out.println("================================================================================================");
     }
 
+    /**
+     * Anhand einer ISBN-Nummer ein Buch / eine Zeitschrift finden und ausgeben
+     */
     void findPublicationAfterISBN() {
 
         System.out.println("================================================================================================");
         List<Publication> publications = Stream.concat(mBooks.stream(), mMagazines.stream()).collect(Collectors.toList());
 
         String randomISBN = getRandomValueFromList(publications.stream().map(Publication::getISBN).collect(Collectors.toList()));
-        System.out.println(String.format("Looking for publication with ISBN %s", randomISBN));
+        System.out.println(String.format(FIND_PUBLICATION_WITH_ISBN, randomISBN));
 
         Publication found = publications.stream()
                 .filter(publication -> publication.getISBN().equals(randomISBN))
                 .findFirst().orElse(null);
 
         if (found == null) {
-            System.out.println(String.format("No publication with %s found", randomISBN));
+            System.out.println(String.format(PUBLICATION_NOT_FOUND, randomISBN));
         } else {
             PrintModelVisitor printVisitor = new PrintModelVisitor();
             found.accept(printVisitor);
@@ -73,13 +82,36 @@ public class CatalogueImporter {
         }
         System.out.println("================================================================================================");
     }
+
+    void findAllPublicationsFromAuthor() {
+
+        System.out.println("================================================================================================");
+
+        Author randomAuthor = getRandomValueFromList(new ArrayList<>(mAuthors));
+        if (randomAuthor == null) {
+            throw new RuntimeException(NO_AUTHOR_FOUND);
+        }
+        System.out.println(String.format(FIND_PUBLICATIONS_FROM_AUTHOR, randomAuthor.getLastName(), randomAuthor.getFirstName()));
+
+        List<Publication> publications = Stream.concat(mBooks.stream(), mMagazines.stream()).collect(Collectors.toList());
+        Set<Publication> foundPublications = publications.stream()
+                .filter(publication -> publication.getAuthors().contains(randomAuthor.getEmail()))
+                .collect(Collectors.toSet());
+
+        PrintModelVisitor printVisitor = new PrintModelVisitor();
+        visitPublications(foundPublications, printVisitor);
+        System.out.println(printVisitor.getPublications());
+
+        System.out.println("================================================================================================");
+    }
+
     /**
      * Alle Bücher / Zeitschriften nach Titel sortieren und ausgeben
      */
     void showAllPublicationsSorted() {
 
         System.out.println("================================================================================================");
-        System.out.println("Print all publications sorted by title");
+        System.out.println(SORT_PUBLICATIONS_BY_TITLE);
         PrintModelVisitor printVisitor = new PrintModelVisitor();
         visitPublications(sortPublicationsAfterTitle(mBooks), printVisitor);
         visitPublications(sortPublicationsAfterTitle(mMagazines), printVisitor);
@@ -140,8 +172,8 @@ public class CatalogueImporter {
      * Instantiates the given model class and mapRecord a record to it.
      *
      * @param modelClass to be instantiated
-     * @param record to be mapped in the class
-     * @param <M> Generic for a {@link VisitableCatalogueModel}
+     * @param record     to be mapped in the class
+     * @param <M>        Generic for a {@link VisitableCatalogueModel}
      * @return a {@link VisitableCatalogueModel}
      */
     private <M extends VisitableCatalogueModel> M createModel(Class<M> modelClass, CSVRecord record) {
@@ -196,7 +228,7 @@ public class CatalogueImporter {
         return publicationList.stream().sorted(Comparator.comparing(Publication::getTitle)).collect(Collectors.toList());
     }
 
-    private String getRandomValueFromList(List<String> values) {
+    private <T> T getRandomValueFromList(List<T> values) {
 
         int randomIndex = new Random().nextInt(values.size());
         return values.get(randomIndex);

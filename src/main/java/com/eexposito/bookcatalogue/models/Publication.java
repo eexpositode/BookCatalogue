@@ -16,9 +16,9 @@ public abstract class Publication implements VisitableCatalogueModel {
         return mTitle;
     }
 
-    void setTitle(String mTitle) {
+    void setTitle(String title) {
 
-        this.mTitle = mTitle;
+        this.mTitle = title;
     }
 
     public List<String> getAuthors() {
@@ -26,9 +26,9 @@ public abstract class Publication implements VisitableCatalogueModel {
         return mAuthors;
     }
 
-    void setAuthors(List<String> mAuthorList) {
+    void setAuthors(List<String> authorList) {
 
-        this.mAuthors = mAuthorList;
+        this.mAuthors = authorList;
     }
 
     public String getISBN() {
@@ -36,8 +36,8 @@ public abstract class Publication implements VisitableCatalogueModel {
         return mISBN;
     }
 
-    void setISBN(String mISBN) {
+    void setISBN(String isbn) {
 
-        this.mISBN = mISBN;
+        this.mISBN = isbn;
     }
 }

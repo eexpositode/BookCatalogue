@@ -6,7 +6,7 @@ public class MagazineHeader implements CatalogueHeader {
     public static final String ISBN = "ISBN-Nummer";
     public static final String AUTHOR = "Autor";
     public static final String DATE = "Erscheinungsdatum";
-    public static final String DATA_FILE = "/data/zeitschriften.csv";
+    private static final String DATA_FILE = "/data/zeitschriften.csv";
 
     @Override
     public String getSourceData() {

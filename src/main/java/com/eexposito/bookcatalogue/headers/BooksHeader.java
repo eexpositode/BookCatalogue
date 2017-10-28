@@ -6,7 +6,7 @@ public class BooksHeader implements CatalogueHeader {
     public static final String ISBN = "ISBN-Nummer";
     public static final String AUTHORS = "Autoren";
     public static final String DESCRIPTION = "Kurzbeschreibung";
-    public static final String DATA_FILE = "/data/buecher.csv";
+    private static final String DATA_FILE = "/data/buecher.csv";
 
     @Override
     public String getSourceData() {

@@ -18,9 +18,9 @@ public class Author implements VisitableCatalogueModel {
         return mFirstName;
     }
 
-    private void setFirstName(String mName) {
+    private void setFirstName(String firstname) {
 
-        this.mFirstName = mName;
+        this.mFirstName = firstname;
     }
 
     public String getLastName() {
@@ -28,9 +28,9 @@ public class Author implements VisitableCatalogueModel {
         return mLastName;
     }
 
-    private void setLastName(String mFamilyName) {
+    private void setLastName(String lastname) {
 
-        this.mLastName = mFamilyName;
+        this.mLastName = lastname;
     }
 
     public String getEmail() {
@@ -38,9 +38,9 @@ public class Author implements VisitableCatalogueModel {
         return mEmail;
     }
 
-    private void setEmail(String mEmail) {
+    private void setEmail(String email) {
 
-        this.mEmail = mEmail;
+        this.mEmail = email;
     }
 
     //////////////////////////////////////////////////////////////////////
