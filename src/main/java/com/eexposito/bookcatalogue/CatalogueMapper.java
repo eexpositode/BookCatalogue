@@ -6,17 +6,17 @@ import com.eexposito.bookcatalogue.headers.CatalogueHeader;
 import com.eexposito.bookcatalogue.headers.MagazineHeader;
 import com.eexposito.bookcatalogue.models.Author;
 import com.eexposito.bookcatalogue.models.Book;
-import com.eexposito.bookcatalogue.models.CatalogueModel;
+import com.eexposito.bookcatalogue.models.VisitableCatalogueModel;
 import com.eexposito.bookcatalogue.models.Magazine;
 
 import java.util.HashMap;
 
 /**
- * Factory class that binds a {@link CatalogueModel} with its {@link CatalogueHeader}
+ * Factory class that binds a {@link VisitableCatalogueModel} with its {@link CatalogueHeader}
  */
 class CatalogueMapper {
 
-    private static final HashMap<Class<? extends CatalogueModel>, Class<? extends CatalogueHeader>> map =
+    private static final HashMap<Class<? extends VisitableCatalogueModel>, Class<? extends CatalogueHeader>> map =
             new HashMap<>();
 
     static {
@@ -31,7 +31,7 @@ class CatalogueMapper {
      * @param modelClass
      * @return a header Class
      */
-    static Class<? extends CatalogueHeader> getHeaderForModelClass(final Class<? extends CatalogueModel> modelClass) {
+    static Class<? extends CatalogueHeader> getHeaderForModelClass(final Class<? extends VisitableCatalogueModel> modelClass) {
 
         return map.get(modelClass);
     }

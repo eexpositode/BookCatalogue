@@ -1,7 +1,7 @@
 package com.eexposito.bookcatalogue;
 
 import com.eexposito.bookcatalogue.models.TestHeader;
-import com.eexposito.bookcatalogue.models.TestModel;
+import com.eexposito.bookcatalogue.models.TestModelVisitable;
 import org.apache.commons.csv.CSVParser;
 import org.junit.After;
 import org.junit.Before;
@@ -58,9 +58,9 @@ public class CatalogueImporterTest {
     public void testGetHeaderClassHeaderNotFound() throws Exception {
 
         try {
-            mCatalogueImporter.getHeaderClass(TestModel.class);
+            mCatalogueImporter.getHeaderClass(TestModelVisitable.class);
         } catch (RuntimeException e) {
-            assertThat("Unexpected exception message", e.getMessage(), equalTo(String.format(HEADER_NOT_FOUND, TestModel.class)));
+            assertThat("Unexpected exception message", e.getMessage(), equalTo(String.format(HEADER_NOT_FOUND, TestModelVisitable.class)));
             throw e;
         }
     }
@@ -100,11 +100,10 @@ public class CatalogueImporterTest {
     @Test
     public void testImportAuthorsFromDataSource() throws Exception {
 
-        Set<TestModel> models = mCatalogueImporter.importModelsFromDataSource(TestModel.class, TestHeader.class);
+        Set<TestModelVisitable> models = mCatalogueImporter.importModelsFromDataSource(TestModelVisitable.class, TestHeader.class);
         assertThat("Models is null", models, notNullValue());
-        assertThat("Models should have 4 items", models, hasSize(4));
+        assertThat("Models should have 3 items", models, hasSize(3));
 
-        checkModelValues(models, mHeaderForChecking);
         // Test the right values were parsed
         mValuesForChecking.forEach(stringValues -> checkModelValues(models, stringValues));
     }
@@ -112,9 +111,9 @@ public class CatalogueImporterTest {
     //////////////////////////////////////////////////////////////////////////
     // Test utils
     //////////////////////////////////////////////////////////////////////////
-    private void checkModelValues(Set<TestModel> models, final String valuesToCheck) {
+    private void checkModelValues(Set<TestModelVisitable> models, final String valuesToCheck) {
 
-        TestModel foundModel = models.stream()
+        TestModelVisitable foundModel = models.stream()
                 .filter(model -> model.getValues().equals(valuesToCheck))
                 .findFirst().orElse(null);
         assertThat("Model values doesn't match", foundModel, notNullValue());

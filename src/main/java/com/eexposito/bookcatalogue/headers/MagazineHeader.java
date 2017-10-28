@@ -2,7 +2,7 @@ package com.eexposito.bookcatalogue.headers;
 
 public class MagazineHeader implements CatalogueHeader {
 
-    public static final String TITLE = "Title";
+    public static final String TITLE = "Titel";
     public static final String ISBN = "ISBN-Nummer";
     public static final String AUTHOR = "Autor";
     public static final String DATE = "Erscheinungsdatum";

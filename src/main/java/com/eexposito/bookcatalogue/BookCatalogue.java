@@ -4,6 +4,8 @@ public class BookCatalogue {
 
     public static void main(String[] args) {
 
-        new CatalogueImporter().importCatalogue();
+        CatalogueImporter catalogueImporter = new CatalogueImporter();
+        catalogueImporter.importCatalogue();
+        catalogueImporter.showAllPublications();
     }
 }

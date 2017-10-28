@@ -3,9 +3,9 @@ package com.eexposito.bookcatalogue;
 import com.eexposito.bookcatalogue.headers.CatalogueHeader;
 import com.eexposito.bookcatalogue.models.Author;
 import com.eexposito.bookcatalogue.models.Book;
-import com.eexposito.bookcatalogue.models.CatalogueModel;
 import com.eexposito.bookcatalogue.models.Magazine;
-import com.sun.istack.internal.NotNull;
+import com.eexposito.bookcatalogue.models.VisitableCatalogueModel;
+import com.eexposito.bookcatalogue.visitors.PrintModelVisitor;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
@@ -20,9 +20,6 @@ import static com.eexposito.bookcatalogue.CatalogueException.*;
 
 public class CatalogueImporter {
 
-    private static final CSVFormat CSV_FORMAT_SEMICOLON = CSVFormat.newFormat(';');
-    public static final String MODEL_CLASS_NOT_INSTANTIATED = "Model class %s not instantiated";
-
     private Set<Author> mAuthors;
     private Set<Book> mBooks;
     private Set<Magazine> mMagazines;
@@ -34,13 +31,30 @@ public class CatalogueImporter {
     /**
      * Import all data from the given csv data sources
      */
-    public void importCatalogue() {
+    void importCatalogue() {
 
         mAuthors = importModelsFromDataSource(Author.class, getHeaderClass(Author.class));
         mBooks = importModelsFromDataSource(Book.class, getHeaderClass(Book.class));
         mMagazines = importModelsFromDataSource(Magazine.class, getHeaderClass(Magazine.class));
     }
 
+    void showAllPublications() {
+
+        PrintModelVisitor printVisitor = new PrintModelVisitor();
+        mBooks.forEach(book -> book.accept(printVisitor));
+        mMagazines.forEach(magazine -> magazine.accept(printVisitor));
+
+        System.out.println(printVisitor.getPublications());
+    }
+
+
+    private void showBook(Book book) {
+
+    }
+
+    private void showMagazine(Magazine magazine) {
+
+    }
     /////////////////////////////////////////////////////////////////////
     // Private methods
     /////////////////////////////////////////////////////////////////////
@@ -51,8 +65,7 @@ public class CatalogueImporter {
      * @param modelClass which header we need
      * @return found header
      */
-    @NotNull
-    Class<? extends CatalogueHeader> getHeaderClass(@NotNull Class<? extends CatalogueModel> modelClass) {
+    Class<? extends CatalogueHeader> getHeaderClass(Class<? extends VisitableCatalogueModel> modelClass) {
 
         if (modelClass == null) {
             throw new RuntimeException(MODEL_CLASS_CANNOT_BE_NULL);
@@ -66,35 +79,38 @@ public class CatalogueImporter {
     }
 
     /**
-     * Generified method to read any kind of {@link CatalogueModel} associated to a {@link CatalogueHeader} from a
+     * Generified method to read any kind of {@link VisitableCatalogueModel} associated to a {@link CatalogueHeader} from a
      * {@link CSVParser}
      *
-     * @param modelClass  Class implementing CatalogueModel
+     * @param modelClass  Class implementing VisitableCatalogueModel
      * @param headerClass Class implementing CatalogueHeader
-     * @param <M>         Generic type representing CatalogueModel
+     * @param <M>         Generic type representing VisitableCatalogueModel
      * @param <H>         Generic type representing CatalogueHeader
      * @return a Collection of CatalogueModels
      */
-    <M extends CatalogueModel, H extends CatalogueHeader> Set<M> importModelsFromDataSource(Class<M> modelClass, Class<H> headerClass) {
+    <M extends VisitableCatalogueModel, H extends CatalogueHeader> Set<M> importModelsFromDataSource(Class<M> modelClass, Class<H> headerClass) {
 
         try {
             H header = headerClass.newInstance();
             CSVParser parser = importCatalogueFromStream(header.getSourceData(), header.getValues());
             Collection<CSVRecord> records = parser.getRecords();
             return records.stream()
-                    .map(record -> {
-                        try {
-                            M model = modelClass.newInstance();
-                            model.bind(record);
-                            return model;
-                        } catch (Exception e) {
-                            throw new RuntimeException(String.format(MODEL_CLASS_NOT_INSTANTIATED, modelClass));
-                        }
-                    })
+                    .map(record -> createModel(modelClass, record))
                     .collect(Collectors.toSet());
         } catch (Exception e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    private <M extends VisitableCatalogueModel> M createModel(Class<M> modelClass, CSVRecord record) {
+
+        try {
+            M model = modelClass.newInstance();
+            model.bind(record);
+            return model;
+        } catch (Exception e) {
+            throw new RuntimeException(String.format(MODEL_CLASS_NOT_INSTANTIATED, modelClass));
         }
     }
 
@@ -114,6 +130,6 @@ public class CatalogueImporter {
         }
         String filePath = fileURL.getFile();
         FileReader in = new FileReader(filePath);
-        return CSV_FORMAT_SEMICOLON.withHeader(headers).parse(in);
+        return CSVFormat.DEFAULT.withHeader(headers).withDelimiter(';').withFirstRecordAsHeader().parse(in);
     }
 }

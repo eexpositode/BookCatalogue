@@ -1,9 +1,10 @@
 package com.eexposito.bookcatalogue.models;
 
 import com.eexposito.bookcatalogue.headers.AuthorsHeader;
+import com.eexposito.bookcatalogue.visitors.Visitor;
 import org.apache.commons.csv.CSVRecord;
 
-public class Author implements CatalogueModel {
+public class Author implements VisitableCatalogueModel {
 
     private String mFirstName;
     private String mLastName;
@@ -42,11 +43,20 @@ public class Author implements CatalogueModel {
         this.mEmail = mEmail;
     }
 
+    //////////////////////////////////////////////////////////////////////
+    // Implemented methods
+    //////////////////////////////////////////////////////////////////////
     @Override
     public void bind(CSVRecord record) {
 
         setEmail(record.get(AuthorsHeader.EMAIL));
         setFirstName(record.get(AuthorsHeader.FIRSTNAME));
         setLastName(record.get(AuthorsHeader.LASTNAME));
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+
+        visitor.visit(this);
     }
 }

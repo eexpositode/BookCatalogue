@@ -1,11 +1,12 @@
 package com.eexposito.bookcatalogue.models;
 
+import com.eexposito.bookcatalogue.visitors.Visitor;
 import com.sun.deploy.util.StringUtils;
 import org.apache.commons.csv.CSVRecord;
 
 import java.util.stream.Collectors;
 
-public class TestModel implements CatalogueModel {
+public class TestModelVisitable implements VisitableCatalogueModel {
 
     private String mValues;
 
@@ -20,5 +21,10 @@ public class TestModel implements CatalogueModel {
         mValues = StringUtils.join(record.toMap().values().stream()
                                            .sorted(String::compareTo)
                                            .collect(Collectors.toList()), ",");
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+
     }
 }

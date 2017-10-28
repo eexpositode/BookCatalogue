@@ -1,9 +1,11 @@
 package com.eexposito.bookcatalogue.models;
 
-public abstract class Publication implements CatalogueModel {
+import java.util.List;
+
+public abstract class Publication implements VisitableCatalogueModel {
 
     private String mTitle;
-    private String[] mAuthors;
+    private List<String> mAuthors;
     private String mISBN;
 
     //////////////////////////////////////////////////////////////////////
@@ -19,12 +21,12 @@ public abstract class Publication implements CatalogueModel {
         this.mTitle = mTitle;
     }
 
-    public String[] getAuthors() {
+    public List<String> getAuthors() {
 
         return mAuthors;
     }
 
-    void setAuthors(String[] mAuthorList) {
+    void setAuthors(List<String> mAuthorList) {
 
         this.mAuthors = mAuthorList;
     }

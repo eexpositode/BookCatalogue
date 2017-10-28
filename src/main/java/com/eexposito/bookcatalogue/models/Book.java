@@ -1,7 +1,10 @@
 package com.eexposito.bookcatalogue.models;
 
 import com.eexposito.bookcatalogue.headers.BooksHeader;
+import com.eexposito.bookcatalogue.visitors.Visitor;
 import org.apache.commons.csv.CSVRecord;
+
+import java.util.Arrays;
 
 public class Book extends Publication {
 
@@ -20,12 +23,22 @@ public class Book extends Publication {
         this.mDescription = mDescription;
     }
 
+    //////////////////////////////////////////////////////////////////////
+    // Implemented methods
+    //////////////////////////////////////////////////////////////////////
+
     @Override
     public void bind(CSVRecord record) {
 
         setTitle(record.get(BooksHeader.TITLE));
         setISBN(record.get(BooksHeader.ISBN));
-//        setAuthors(record.get(BooksHeader.AUTHORS));
+        setAuthors(Arrays.asList(record.get(BooksHeader.AUTHORS).split(",")));
         setDescription(record.get(BooksHeader.DESCRIPTION));
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+
+        visitor.visit(this);
     }
 }
