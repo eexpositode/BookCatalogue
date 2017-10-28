@@ -10,11 +10,9 @@ import org.apache.commons.csv.CSVRecord;
 
 import java.io.FileReader;
 import java.net.URL;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.eexposito.bookcatalogue.CatalogueException.*;
 
@@ -44,23 +42,50 @@ public class CatalogueImporter {
      */
     void showAllPublications() {
 
+        System.out.println("================================================================================================");
+        System.out.println("Print all publications");
         PrintModelVisitor printVisitor = new PrintModelVisitor();
-        printPublications(mBooks, printVisitor);
-        printPublications(mMagazines, printVisitor);
+        visitPublications(mBooks, printVisitor);
+        visitPublications(mMagazines, printVisitor);
 
         System.out.println(printVisitor.getPublications());
+        System.out.println("================================================================================================");
     }
 
+    void findPublicationAfterISBN() {
+
+        System.out.println("================================================================================================");
+        List<Publication> publications = Stream.concat(mBooks.stream(), mMagazines.stream()).collect(Collectors.toList());
+
+        String randomISBN = getRandomValueFromList(publications.stream().map(Publication::getISBN).collect(Collectors.toList()));
+        System.out.println(String.format("Looking for publication with ISBN %s", randomISBN));
+
+        Publication found = publications.stream()
+                .filter(publication -> publication.getISBN().equals(randomISBN))
+                .findFirst().orElse(null);
+
+        if (found == null) {
+            System.out.println(String.format("No publication with %s found", randomISBN));
+        } else {
+            PrintModelVisitor printVisitor = new PrintModelVisitor();
+            found.accept(printVisitor);
+            System.out.println(printVisitor.getPublications());
+        }
+        System.out.println("================================================================================================");
+    }
     /**
      * Alle Bücher / Zeitschriften nach Titel sortieren und ausgeben
      */
-    void showAllPublicationSorted() {
+    void showAllPublicationsSorted() {
 
+        System.out.println("================================================================================================");
+        System.out.println("Print all publications sorted by title");
         PrintModelVisitor printVisitor = new PrintModelVisitor();
-        printPublications(sortPublicationsAfterTitle(mBooks), printVisitor);
-        printPublications(sortPublicationsAfterTitle(mMagazines), printVisitor);
+        visitPublications(sortPublicationsAfterTitle(mBooks), printVisitor);
+        visitPublications(sortPublicationsAfterTitle(mMagazines), printVisitor);
 
         System.out.println(printVisitor.getPublications());
+        System.out.println("================================================================================================");
     }
 
     /////////////////////////////////////////////////////////////////////
@@ -111,11 +136,19 @@ public class CatalogueImporter {
         }
     }
 
+    /**
+     * Instantiates the given model class and mapRecord a record to it.
+     *
+     * @param modelClass to be instantiated
+     * @param record to be mapped in the class
+     * @param <M> Generic for a {@link VisitableCatalogueModel}
+     * @return a {@link VisitableCatalogueModel}
+     */
     private <M extends VisitableCatalogueModel> M createModel(Class<M> modelClass, CSVRecord record) {
 
         try {
             M model = modelClass.newInstance();
-            model.bind(record);
+            model.mapRecord(record);
             return model;
         } catch (Exception e) {
             throw new RuntimeException(String.format(MODEL_CLASS_NOT_INSTANTIATED, modelClass));
@@ -141,13 +174,31 @@ public class CatalogueImporter {
         return CSVFormat.DEFAULT.withHeader(headers).withDelimiter(';').withFirstRecordAsHeader().parse(in);
     }
 
-    private void printPublications(Collection<? extends Publication> publicationList, Visitor visitor) {
+    /**
+     * Applies the given visitor to each publication on the list
+     *
+     * @param publicationList List of publications to be visited
+     * @param visitor         to be used on each publication
+     */
+    private void visitPublications(Collection<? extends Publication> publicationList, Visitor visitor) {
 
         publicationList.forEach(publication -> publication.accept(visitor));
     }
 
+    /**
+     * Sort publication list alphabetically
+     *
+     * @param publicationList List of publications to be sorted
+     * @return sorted publication list
+     */
     private List<? extends Publication> sortPublicationsAfterTitle(Collection<? extends Publication> publicationList) {
 
         return publicationList.stream().sorted(Comparator.comparing(Publication::getTitle)).collect(Collectors.toList());
+    }
+
+    private String getRandomValueFromList(List<String> values) {
+
+        int randomIndex = new Random().nextInt(values.size());
+        return values.get(randomIndex);
     }
 }

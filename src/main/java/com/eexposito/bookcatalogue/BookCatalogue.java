@@ -7,5 +7,7 @@ public class BookCatalogue {
         CatalogueImporter catalogueImporter = new CatalogueImporter();
         catalogueImporter.importCatalogue();
         catalogueImporter.showAllPublications();
+        catalogueImporter.findPublicationAfterISBN();
+        catalogueImporter.showAllPublicationsSorted();
     }
 }

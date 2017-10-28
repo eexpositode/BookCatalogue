@@ -5,7 +5,7 @@ import org.apache.commons.csv.CSVRecord;
 
 public interface VisitableCatalogueModel {
 
-    void bind(CSVRecord record);
+    void mapRecord(CSVRecord record);
 
     void accept(Visitor visitor);
 }

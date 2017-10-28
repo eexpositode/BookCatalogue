@@ -28,7 +28,7 @@ public class Book extends Publication {
     //////////////////////////////////////////////////////////////////////
 
     @Override
-    public void bind(CSVRecord record) {
+    public void mapRecord(CSVRecord record) {
 
         setTitle(record.get(BooksHeader.TITLE));
         setISBN(record.get(BooksHeader.ISBN));

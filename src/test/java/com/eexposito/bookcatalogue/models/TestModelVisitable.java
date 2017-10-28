@@ -16,7 +16,7 @@ public class TestModelVisitable implements VisitableCatalogueModel {
     }
 
     @Override
-    public void bind(CSVRecord record) {
+    public void mapRecord(CSVRecord record) {
 
         mValues = StringUtils.join(record.toMap().values().stream()
                                            .sorted(String::compareTo)

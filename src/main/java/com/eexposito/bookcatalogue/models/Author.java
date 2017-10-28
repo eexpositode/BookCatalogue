@@ -47,7 +47,7 @@ public class Author implements VisitableCatalogueModel {
     // Implemented methods
     //////////////////////////////////////////////////////////////////////
     @Override
-    public void bind(CSVRecord record) {
+    public void mapRecord(CSVRecord record) {
 
         setEmail(record.get(AuthorsHeader.EMAIL));
         setFirstName(record.get(AuthorsHeader.FIRSTNAME));

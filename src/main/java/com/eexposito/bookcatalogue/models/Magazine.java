@@ -28,7 +28,7 @@ public class Magazine extends Publication {
     //////////////////////////////////////////////////////////////////////
 
     @Override
-    public void bind(CSVRecord record) {
+    public void mapRecord(CSVRecord record) {
 
         setTitle(record.get(MagazineHeader.TITLE));
         setISBN(record.get(MagazineHeader.ISBN));
