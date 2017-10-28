@@ -83,6 +83,9 @@ class CatalogueImporter {
         System.out.println("================================================================================================");
     }
 
+    /**
+     * Alle Bücher / Zeitschriften eines Autors finden und ausgeben
+     */
     void findAllPublicationsFromAuthor() {
 
         System.out.println("================================================================================================");
