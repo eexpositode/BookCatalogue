@@ -1,11 +1,9 @@
 package com.eexposito.bookcatalogue;
 
 import com.eexposito.bookcatalogue.headers.CatalogueHeader;
-import com.eexposito.bookcatalogue.models.Author;
-import com.eexposito.bookcatalogue.models.Book;
-import com.eexposito.bookcatalogue.models.Magazine;
-import com.eexposito.bookcatalogue.models.VisitableCatalogueModel;
+import com.eexposito.bookcatalogue.models.*;
 import com.eexposito.bookcatalogue.visitors.PrintModelVisitor;
+import com.eexposito.bookcatalogue.visitors.Visitor;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
@@ -13,6 +11,8 @@ import org.apache.commons.csv.CSVRecord;
 import java.io.FileReader;
 import java.net.URL;
 import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -20,16 +20,17 @@ import static com.eexposito.bookcatalogue.CatalogueException.*;
 
 public class CatalogueImporter {
 
-    private Set<Author> mAuthors;
-    private Set<Book> mBooks;
-    private Set<Magazine> mMagazines;
+    private Collection<Author> mAuthors;
+    private Collection<Book> mBooks;
+    private Collection<Magazine> mMagazines;
 
     /////////////////////////////////////////////////////////////////////
     // Accessors
     /////////////////////////////////////////////////////////////////////
 
     /**
-     * Import all data from the given csv data sources
+     * Lesen aller Daten aus mehreren CSV-Dateien im Ordner "data".
+     * Diese finden Sie im Anhang als ZIP-Archiv. Der Aufbau der Dateien sollte selbsterklärend sein.
      */
     void importCatalogue() {
 
@@ -38,23 +39,30 @@ public class CatalogueImporter {
         mMagazines = importModelsFromDataSource(Magazine.class, getHeaderClass(Magazine.class));
     }
 
+    /**
+     * Alle Bücher / Zeitschriften mit allen Details ausgeben
+     */
     void showAllPublications() {
 
         PrintModelVisitor printVisitor = new PrintModelVisitor();
-        mBooks.forEach(book -> book.accept(printVisitor));
-        mMagazines.forEach(magazine -> magazine.accept(printVisitor));
+        printPublications(mBooks, printVisitor);
+        printPublications(mMagazines, printVisitor);
 
         System.out.println(printVisitor.getPublications());
     }
 
+    /**
+     * Alle Bücher / Zeitschriften nach Titel sortieren und ausgeben
+     */
+    void showAllPublicationSorted() {
 
-    private void showBook(Book book) {
+        PrintModelVisitor printVisitor = new PrintModelVisitor();
+        printPublications(sortPublicationsAfterTitle(mBooks), printVisitor);
+        printPublications(sortPublicationsAfterTitle(mMagazines), printVisitor);
 
+        System.out.println(printVisitor.getPublications());
     }
 
-    private void showMagazine(Magazine magazine) {
-
-    }
     /////////////////////////////////////////////////////////////////////
     // Private methods
     /////////////////////////////////////////////////////////////////////
@@ -131,5 +139,15 @@ public class CatalogueImporter {
         String filePath = fileURL.getFile();
         FileReader in = new FileReader(filePath);
         return CSVFormat.DEFAULT.withHeader(headers).withDelimiter(';').withFirstRecordAsHeader().parse(in);
+    }
+
+    private void printPublications(Collection<? extends Publication> publicationList, Visitor visitor) {
+
+        publicationList.forEach(publication -> publication.accept(visitor));
+    }
+
+    private List<? extends Publication> sortPublicationsAfterTitle(Collection<? extends Publication> publicationList) {
+
+        return publicationList.stream().sorted(Comparator.comparing(Publication::getTitle)).collect(Collectors.toList());
     }
 }

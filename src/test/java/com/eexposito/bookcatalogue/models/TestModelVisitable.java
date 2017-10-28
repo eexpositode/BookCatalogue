@@ -1,6 +1,6 @@
 package com.eexposito.bookcatalogue.models;
 
-import com.eexposito.bookcatalogue.visitors.Visitor;
+import com.eexposito.bookcatalogue.visitors.CatalogueVisitor;
 import com.sun.deploy.util.StringUtils;
 import org.apache.commons.csv.CSVRecord;
 
@@ -24,7 +24,7 @@ public class TestModelVisitable implements VisitableCatalogueModel {
     }
 
     @Override
-    public void accept(Visitor visitor) {
+    public void accept(CatalogueVisitor visitor) {
 
     }
 }
