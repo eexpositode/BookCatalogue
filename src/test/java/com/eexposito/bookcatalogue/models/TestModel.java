@@ -6,7 +6,7 @@ import org.apache.commons.csv.CSVRecord;
 
 import java.util.stream.Collectors;
 
-public class TestModelVisitable implements VisitableCatalogueModel {
+public class TestModel implements VisitableCatalogueModel {
 
     private String mValues;
 

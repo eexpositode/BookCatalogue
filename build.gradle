@@ -22,7 +22,7 @@ jar {
     exclude 'META-INF/*.SF', 'META-INF/*.DSA', 'META-INF/*.RSA', 'META-INF/*.MF'
 
     manifest {
-        attributes 'Main-Class': 'com.eexposito.bookcatalogue.BookCatalogue',
+        attributes 'Main-Class': 'com.eexposito.bookcatalogue.Main',
                 'Class-Path': configurations.runtime.files.collect { "lib/$it.name" }.join(' ')
     }
 }
