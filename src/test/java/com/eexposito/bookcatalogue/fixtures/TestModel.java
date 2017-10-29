@@ -1,5 +1,6 @@
-package com.eexposito.bookcatalogue.models;
+package com.eexposito.bookcatalogue.fixtures;
 
+import com.eexposito.bookcatalogue.models.VisitableCatalogueModel;
 import com.eexposito.bookcatalogue.visitors.Visitor;
 import com.sun.deploy.util.StringUtils;
 import org.apache.commons.csv.CSVRecord;

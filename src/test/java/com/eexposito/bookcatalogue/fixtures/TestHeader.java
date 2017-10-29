@@ -1,4 +1,4 @@
-package com.eexposito.bookcatalogue.models;
+package com.eexposito.bookcatalogue.fixtures;
 
 import com.eexposito.bookcatalogue.headers.CatalogueHeader;
 

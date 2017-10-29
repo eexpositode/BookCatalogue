@@ -2,6 +2,7 @@ package com.eexposito.bookcatalogue;
 
 import com.eexposito.bookcatalogue.headers.CatalogueHeader;
 import com.eexposito.bookcatalogue.models.*;
+import com.eexposito.bookcatalogue.utils.CatalogueDefinitions;
 import com.eexposito.bookcatalogue.utils.CatalogueMapper;
 import com.eexposito.bookcatalogue.visitors.PrintModelVisitor;
 import com.eexposito.bookcatalogue.visitors.Visitor;
@@ -193,7 +194,7 @@ public class CatalogueImporter {
         }
         String filePath = fileURL.getFile();
         FileReader in = new FileReader(filePath);
-        return CSVFormat.DEFAULT.withHeader(headers).withDelimiter(';').withFirstRecordAsHeader().parse(in);
+        return CatalogueDefinitions.mCustomFormat.withHeader(headers).parse(in);
     }
 
     /**

@@ -1,7 +1,7 @@
 package com.eexposito.bookcatalogue;
 
-import com.eexposito.bookcatalogue.models.TestHeader;
-import com.eexposito.bookcatalogue.models.TestModel;
+import com.eexposito.bookcatalogue.fixtures.TestHeader;
+import com.eexposito.bookcatalogue.fixtures.TestModel;
 import org.apache.commons.csv.CSVParser;
 import org.junit.After;
 import org.junit.Before;

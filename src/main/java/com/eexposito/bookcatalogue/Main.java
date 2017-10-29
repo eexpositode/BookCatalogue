@@ -18,6 +18,8 @@ public class Main {
     private static final String FIND_PUBLICATIONS_FROM_AUTHOR = "Find all publications from %s,%s (%s)\n";
     private static final String SORT_PUBLICATIONS_BY_TITLE = "Print all publications sorted by title\n";
 
+    CatalogueImporter mCatalogueImporter;
+
     public static void main(String[] args) {
 
         new Main().run(args);
