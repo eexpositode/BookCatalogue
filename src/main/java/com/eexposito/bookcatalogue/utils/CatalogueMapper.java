@@ -14,7 +14,9 @@ import java.util.HashMap;
 /**
  * Factory class that binds a {@link VisitableCatalogueModel} with its {@link CatalogueHeader}
  *
- * This way we can ensure the parsing is done without mismatching data source and header.
+ * This way we can ensure the parsing is done without mismatching data source and header. Another way to accomplish that,
+ * could have been creating an Importer Class for each data source where we could bind a Model with its Header. Those
+ * classes would inherit from a parent class that use generics to refer to its children.
  */
 public class CatalogueMapper {
 
