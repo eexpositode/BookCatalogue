@@ -13,9 +13,14 @@ import java.util.HashMap;
 
 /**
  * Factory class that binds a {@link VisitableCatalogueModel} with its {@link CatalogueHeader}
+ *
+ * This way we can ensure the parsing is done without mismatching data source and header.
  */
 public class CatalogueMapper {
 
+    /**
+     * Static mapping from data source and header. In order to support other data, remember doing the mapping here
+     */
     private static final HashMap<Class<? extends VisitableCatalogueModel>, Class<? extends CatalogueHeader>> map =
             new HashMap<>();
 

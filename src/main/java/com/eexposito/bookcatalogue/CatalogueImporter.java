@@ -21,7 +21,10 @@ import java.util.stream.Stream;
 
 import static com.eexposito.bookcatalogue.utils.CatalogueException.*;
 
-public class CatalogueImporter {
+/**
+ *
+ */
+class CatalogueImporter {
 
     private Collection<Author> mAuthors;
     private Collection<Book> mBooks;
@@ -38,9 +41,9 @@ public class CatalogueImporter {
 
     /**
      * Lesen aller Daten aus mehreren CSV-Dateien im Ordner "data".
-     * Diese finden Sie im Anhang als ZIP-Archiv. Der Aufbau der Dateien sollte selbsterklärend sein.
+     * Diese finden Sie im Anhang als ZIP-Archiv. Der Aufbau der Dateien sollte selbsterkla&#x308;rend sein.
      */
-    void importCatalogue() {
+    private void importCatalogue() {
 
         mAuthors = importModelsFromDataSource(Author.class, getHeaderClass(Author.class));
         mBooks = importModelsFromDataSource(Book.class, getHeaderClass(Book.class));
@@ -48,7 +51,7 @@ public class CatalogueImporter {
     }
 
     /**
-     * Alle Bücher / Zeitschriften mit allen Details ausgeben
+     * Alle Bu&#x308;cher / Zeitschriften mit allen Details ausgeben
      */
     String showAllPublications() {
 
@@ -83,9 +86,9 @@ public class CatalogueImporter {
     }
 
     /**
-     * Alle Bücher / Zeitschriften eines Autors finden und ausgeben
+     * Alle Bu&#x308;cher / Zeitschriften eines Autors finden und ausgeben
      *
-     * @param author whom publications to show
+     * @param author whose publications to show
      */
     String findAllPublicationsFromAuthor(final Author author) {
 
@@ -100,7 +103,7 @@ public class CatalogueImporter {
     }
 
     /**
-     * Alle Bücher / Zeitschriften nach Titel sortieren und ausgeben
+     * Alle Bu&#x308;cher / Zeitschriften nach Titel sortieren und ausgeben
      */
     String showAllPublicationsSorted() {
 
@@ -112,7 +115,7 @@ public class CatalogueImporter {
     }
 
     /////////////////////////////////////////////////////////////////////
-    // Private methods
+    // Utility methods
     /////////////////////////////////////////////////////////////////////
 
     /**

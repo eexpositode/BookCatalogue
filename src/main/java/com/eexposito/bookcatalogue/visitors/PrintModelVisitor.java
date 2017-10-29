@@ -5,6 +5,9 @@ import com.eexposito.bookcatalogue.models.Book;
 import com.eexposito.bookcatalogue.models.Magazine;
 import org.apache.commons.lang3.StringUtils;
 
+/**
+ * Visitor pattern used to print and keep this logic away from the models.
+ */
 public class PrintModelVisitor implements Visitor {
 
     private String mModelString = "";
