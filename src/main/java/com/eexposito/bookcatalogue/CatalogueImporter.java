@@ -11,19 +11,17 @@ import org.apache.commons.csv.CSVRecord;
 
 import java.io.FileReader;
 import java.net.URL;
-import java.util.*;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.eexposito.bookcatalogue.utils.CatalogueException.*;
 
-class CatalogueImporter {
+public class CatalogueImporter {
 
-    private static final String PRINT_ALL_PUBLICATIONS = "Print all publications\n";
-    private static final String FIND_PUBLICATION_WITH_ISBN = "Find publication with ISBN %s\n";
-    private static final String PUBLICATION_NOT_FOUND = "No publication with %s found\n";
-    private static final String FIND_PUBLICATIONS_FROM_AUTHOR = "Find all publications from %s,%s (%s)\n";
-    private static final String SORT_PUBLICATIONS_BY_TITLE = "Print all publications sorted by title\n";
     private Collection<Author> mAuthors;
     private Collection<Book> mBooks;
     private Collection<Magazine> mMagazines;
@@ -31,6 +29,11 @@ class CatalogueImporter {
     /////////////////////////////////////////////////////////////////////
     // Accessors
     /////////////////////////////////////////////////////////////////////
+
+    CatalogueImporter() {
+
+        importCatalogue();
+    }
 
     /**
      * Lesen aller Daten aus mehreren CSV-Dateien im Ordner "data".
@@ -46,16 +49,13 @@ class CatalogueImporter {
     /**
      * Alle Bücher / Zeitschriften mit allen Details ausgeben
      */
-    void showAllPublications() {
+    String showAllPublications() {
 
-        System.out.println("================================================================================================");
-        System.out.println(PRINT_ALL_PUBLICATIONS);
         PrintModelVisitor printVisitor = new PrintModelVisitor();
         visitPublications(mBooks, printVisitor);
         visitPublications(mMagazines, printVisitor);
 
-        System.out.println(printVisitor.getPublications());
-        System.out.println("================================================================================================");
+        return printVisitor.getPublications();
     }
 
     /**
@@ -63,12 +63,9 @@ class CatalogueImporter {
      *
      * @param isbn from publication to find
      */
-    void findPublicationAfterISBN(String isbn) {
+    String findPublicationAfterISBN(String isbn) {
 
-        System.out.println("================================================================================================");
         List<Publication> publications = Stream.concat(mBooks.stream(), mMagazines.stream()).collect(Collectors.toList());
-
-        System.out.println(String.format(FIND_PUBLICATION_WITH_ISBN, isbn));
 
         final String finalISBN = isbn;
         Publication found = publications.stream()
@@ -76,61 +73,41 @@ class CatalogueImporter {
                 .findFirst().orElse(null);
 
         if (found == null) {
-            System.out.println(String.format(PUBLICATION_NOT_FOUND, isbn));
+            return null;
         } else {
             PrintModelVisitor printVisitor = new PrintModelVisitor();
             found.accept(printVisitor);
-            System.out.println(printVisitor.getPublications());
+            return printVisitor.getPublications();
         }
-
-        System.out.println("================================================================================================");
     }
 
     /**
      * Alle Bücher / Zeitschriften eines Autors finden und ausgeben
      *
-     * @param email from author
+     * @param author whom publications to show
      */
-    void findAllPublicationsFromAuthor(String email) {
+    String findAllPublicationsFromAuthor(final Author author) {
 
-        System.out.println("================================================================================================");
+        List<Publication> publications = Stream.concat(mBooks.stream(), mMagazines.stream()).collect(Collectors.toList());
+        Set<Publication> foundPublications = publications.stream()
+                .filter(publication -> publication.getAuthors().contains(author.getEmail()))
+                .collect(Collectors.toSet());
 
-        Author queriedActor = mAuthors.stream()
-                .filter(author -> author.getEmail().equals(email))
-                .findAny()
-                .orElse(null);
-
-        if (queriedActor == null) {
-            System.out.println(NO_AUTHOR_FOUND);
-        } else {
-            System.out.println(String.format(FIND_PUBLICATIONS_FROM_AUTHOR, queriedActor.getLastName(), queriedActor.getFirstName(), queriedActor.getEmail()));
-
-            List<Publication> publications = Stream.concat(mBooks.stream(), mMagazines.stream()).collect(Collectors.toList());
-            Set<Publication> foundPublications = publications.stream()
-                    .filter(publication -> publication.getAuthors().contains(queriedActor.getEmail()))
-                    .collect(Collectors.toSet());
-
-            PrintModelVisitor printVisitor = new PrintModelVisitor();
-            visitPublications(foundPublications, printVisitor);
-            System.out.println(printVisitor.getPublications());
-        }
-
-        System.out.println("================================================================================================");
+        PrintModelVisitor printVisitor = new PrintModelVisitor();
+        visitPublications(foundPublications, printVisitor);
+        return printVisitor.getPublications();
     }
 
     /**
      * Alle Bücher / Zeitschriften nach Titel sortieren und ausgeben
      */
-    void showAllPublicationsSorted() {
+    String showAllPublicationsSorted() {
 
-        System.out.println("================================================================================================");
-        System.out.println(SORT_PUBLICATIONS_BY_TITLE);
         PrintModelVisitor printVisitor = new PrintModelVisitor();
         visitPublications(sortPublicationsAfterTitle(mBooks), printVisitor);
         visitPublications(sortPublicationsAfterTitle(mMagazines), printVisitor);
 
-        System.out.println(printVisitor.getPublications());
-        System.out.println("================================================================================================");
+        return printVisitor.getPublications();
     }
 
     /////////////////////////////////////////////////////////////////////
@@ -228,6 +205,14 @@ class CatalogueImporter {
     private void visitPublications(Collection<? extends Publication> publicationList, Visitor visitor) {
 
         publicationList.forEach(publication -> publication.accept(visitor));
+    }
+
+    Author findAuthorAfterEmail(final String email) {
+
+        return mAuthors.stream()
+                .filter(author -> author.getEmail().equals(email))
+                .findAny()
+                .orElse(null);
     }
 
     /**

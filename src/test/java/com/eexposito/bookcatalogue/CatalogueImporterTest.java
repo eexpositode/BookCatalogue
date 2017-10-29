@@ -33,7 +33,6 @@ public class CatalogueImporterTest {
         mCatalogueImporter = new CatalogueImporter();
     }
 
-
     @After
     public void tearDown() throws Exception {
 
